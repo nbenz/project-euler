@@ -1,13 +1,16 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Problem89{
+   
    public static void main(String[] args){
       Problem89 p = new Problem89();
       long time = System.currentTimeMillis();
       p.run();
-      System.out.println("Time: " + (System.currentTimeMillis()-time));
+      System.out.println("Time: " + (System.currentTimeMillis()-time));         
    }
    
    public void run(){
@@ -33,113 +36,46 @@ public class Problem89{
       System.out.println("Saved: " + charsSaved + " characters.");   
    }
    
-   //Hoping there is a much better way to do this... 
    public String getNumerals(int n) {
       String numerals = "";
-      while(n>=1000){
-         numerals += "M";
-         n -= 1000;
-      }
-      if(n/100 == 9){
-         numerals += "CM";
-         n -= 900;
-      }
-      else {
-         if(n>=500){
-            numerals += "D";
-            n -= 500;
-         }
-         if(n/100 == 4){
-            numerals += "CD";
-            n -= 400;
-         }
-         else{
-            while(n >= 100){
-               numerals += "C";
-               n -= 100;
-            }
+      int[] keys = {1000,900,500,400,100,90,50,40,10,9,5,4,1};
+      String[] values = {"M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I"};
+      for(int i=0; i<keys.length; i++){
+         while(n >= keys[i]){
+            numerals += values[i];
+            n -= keys[i];
          }
       }
-      if(n/10 == 9){
-         numerals += "XC";
-         n -= 90;
-      }
-      else {      
-         if(n>=50){
-            numerals += "L";
-            n -= 50;
-         }
-         if(n/10 == 4){
-            numerals += "XL";
-            n -= 40;
-         }
-         else{
-            while(n>=10){
-               numerals += "X";
-               n -= 10;
-            }
-         }
-      }
-      switch(n){
-         case 9:
-            numerals += "IX";
-            break;
-         case 8:
-            numerals += "VIII";
-            break;
-         case 7:
-            numerals += "VII";
-            break;
-         case 6:
-            numerals += "VI";
-            break;
-         case 5:
-            numerals += "V";
-            break;
-         case 4:
-            numerals += "IV";
-            break;
-         case 3:
-            numerals += "III";
-            break;
-         case 2:
-            numerals += "II";
-            break;
-         case 1:
-            numerals += "I";
-            break;                  
-      }
-      
       return numerals;
    }
    
    public int parseNumerals(String nums){
       int length = nums.length();
-      int sum = 0; //Sum of the numerals. Bad variable name.
+      int sum = 0; //Sum of the numerals. Bad variable name?
       char currentNum;
       char nextNum;
       
       for(int i=0; i<nums.length(); i++){
-         if(i == nums.length()-1){
-            sum += numToInt(nums.charAt(i));   
+         if(i == nums.length()-1){ //End of the string
+            sum += numeralToInt(nums.charAt(i));   
          }
          else{
             currentNum = nums.charAt(i);
             nextNum = nums.charAt(i+1);
             
-            if(numToInt(currentNum)<numToInt(nextNum)){
-               sum += (numToInt(nextNum)-numToInt(currentNum));
-               i++;
+            if(numeralToInt(currentNum)<numeralToInt(nextNum)){  //Cases like XL - Need to subtract
+               sum += (numeralToInt(nextNum)-numeralToInt(currentNum));
+               i++;   //Accounted for two letters in this block
             }
             else{
-               sum += numToInt(currentNum);
+               sum += numeralToInt(currentNum);  //If subtraction isn't need, add the next number
             }
          }
       }
       return sum;
    }
    
-   public int numToInt(char num){
+   public int numeralToInt(char num){
       switch(num){
          case 'I': return 1;
          case 'V': return 5;
