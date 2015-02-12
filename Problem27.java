@@ -28,7 +28,7 @@ public class Problem27{
             }
          }
       }
-      System.out.println("Result: " + x*y);
+      System.out.println("a = "+x+"\nb = "+y+"\nResult = "+x*y);
    }
    
    public boolean[] sieve(int n){
