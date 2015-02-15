@@ -58,6 +58,8 @@ public class Problem11 {
             }   
             i++;    
          }          
-      }catch(Exception e){}   
+      }catch(Exception e){
+         System.out.println("Add the file idiot.");
+      }   
    }
 }
